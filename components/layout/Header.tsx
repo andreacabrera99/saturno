@@ -121,7 +121,7 @@ export default function Header() {
                 {cat.label}
               </Link>
             ))}
-            <div className="px-6 py-3 border-t border-stone-100 flex gap-4">
+            <div className="px-6 py-3 border-t border-stone-100 flex flex-col gap-4">
               <Link href="/account/wishlist" className="flex items-center gap-1.5 text-xs text-stone-400">
                 <Heart size={13} /> Favoritos
               </Link>

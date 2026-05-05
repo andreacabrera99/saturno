@@ -59,7 +59,7 @@ const data = {
     { "id": "47", "image": "/products/WhatsApp_Image_2025-05-05_at_9.09.22_PM.webp",            "name": "pastel",                "category": "playeras-y-tops", "price": "$320"  },
     { "id": "48", "image": "/products/8480A23E-F633-47BD-B194-3C14A209A8F8.webp",               "name": "pirata",                "category": "playeras-y-tops", "price": "$420"  },
     { "id": "49", "image": "/products/488B33D4-71A5-4144-A3FA-73C43F5EEB25.webp",               "name": "romance",               "category": "playeras-y-tops", "price": "$420"  },
-    { "id": "50", "image": "/products/D5090617-DB5E-4ADC-8B88-8F8DDABE1D0A.webp",               "name": "suspiros",              "category": "playeras-y-tops", "price": "$620"  },
+    { "id": "50", "image": "/products/D5090617-DB5E-4ADC-8B88-8F8DDABE1D0A.webp",               "name": "suspiros",              "category": "faldas", "price": "$620"  },
     { "id": "51", "image": "/products/WhatsAppImage2025-06-29at10.01.07PM.webp",                 "name": "tartaleta",             "category": "playeras-y-tops", "price": "$480"  },
     { "id": "52", "image": "/products/7CE2957B-7C4A-41C0-97DB-08D23F5D44E9.webp",               "name": "trapecista",            "category": "playeras-y-tops", "price": "$480"  },
     { "id": "53", "image": "/products/9CB5CEAF-41BA-45CE-994C-B56C6382DE11.webp",               "name": "valentina",             "category": "playeras-y-tops", "price": "$880"  },

@@ -9,6 +9,12 @@ body {
   color: #1c1917;
 }
 
+/* Stripe buy button host — block layout so the shadow root gets a proper containing block */
+stripe-buy-button {
+  display: block;
+  width: 100%;
+}
+
 /* Smooth scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }

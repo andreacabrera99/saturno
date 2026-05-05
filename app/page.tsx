@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Product, Collection } from "@/types";
 import { ArrowRight } from "lucide-react";
 import IntroAnimation from "@/components/IntroAnimation";
+import ScrollDivider from "@/components/ScrollDivider";
 
 async function getHomeData() {
   const supabase = await createClient();
@@ -39,6 +40,7 @@ export default async function HomePage() {
   return (
     <div className="bg-white">
       <IntroAnimation images={images} />
+      <ScrollDivider />
       <BrandHero collections={collections} />
     </div>
   );

@@ -10,6 +10,8 @@ import { useCart } from "@/context/CartContext";
 import Button from "@/components/ui/Button";
 import ProductGrid from "./ProductGrid";
 import WishlistButton from "@/components/WishlistButton";
+import StripeBuyButton from "@/components/StripeBuyButton";
+import { STRIPE_BUY_BUTTONS } from "@/lib/stripe-buttons";
 
 interface Props {
   product: Product;
@@ -156,6 +158,21 @@ export default function ProductDetail({ product, pairings = [] }: Props) {
               className="w-12 h-12 border border-stone-200 rounded-md bg-white hover:border-stone-400"
             />
           </div>
+
+          {STRIPE_BUY_BUTTONS[product.slug] && (
+            <div className="mt-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex-1 h-px bg-stone-100" />
+                <span className="text-xs text-stone-400">
+                  o compra directamente
+                </span>
+                <div className="flex-1 h-px bg-stone-100" />
+              </div>
+              <div className="flex justify-center">
+                <StripeBuyButton buyButtonId={STRIPE_BUY_BUTTONS[product.slug]} />
+              </div>
+            </div>
+          )}
 
           {/* Fit notes */}
           {product.fit_notes && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { X, Trash2, Minus, Plus } from "lucide-react";
@@ -15,6 +15,32 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { items, total, removeItem, updateQuantity } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleCheckout() {
+    setLoading(true);
+    setError(null);
+    try {
+      const lineItems = items.map((item) => ({
+        name: `${item.product.name} — Talla ${item.size}`,
+        price: item.product.price,
+        quantity: item.quantity,
+        image: item.product.images?.[0]?.url ?? null,
+      }));
+      const res = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: lineItems }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error al iniciar el pago");
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error inesperado");
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
@@ -138,11 +164,17 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <p className="text-xs text-stone-400">
               Envío calculado al momento del pago
             </p>
-            <Link href="/checkout" onClick={onClose}>
-              <Button className="w-full" size="lg">
-                Proceder al pago
-              </Button>
-            </Link>
+            {error && (
+              <p className="text-xs text-red-500 text-center">{error}</p>
+            )}
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={handleCheckout}
+              disabled={loading}
+            >
+              {loading ? "Redirigiendo..." : "Proceder al pago"}
+            </Button>
             <Link href="/cart" onClick={onClose}>
               <Button variant="secondary" className="w-full" size="lg">
                 Ver carrito

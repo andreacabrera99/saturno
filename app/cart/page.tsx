@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
@@ -8,7 +9,33 @@ import { formatPrice } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 
 export default function CartPage() {
-  const { items, total, removeItem, updateQuantity } = useCart();
+  const { items, total, removeItem, updateQuantity, clearCart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleCheckout() {
+    setLoading(true);
+    setError(null);
+    try {
+      const lineItems = items.map((item) => ({
+        name: `${item.product.name} — Talla ${item.size}`,
+        price: item.product.price,
+        quantity: item.quantity,
+        image: item.product.images?.[0]?.url ?? null,
+      }));
+      const res = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: lineItems }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error al iniciar el pago");
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error inesperado");
+      setLoading(false);
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -29,9 +56,17 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-light tracking-tight text-stone-900 mb-8">
-        Tu carrito
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-light tracking-tight text-stone-900">
+          Tu carrito
+        </h1>
+        <button
+          onClick={clearCart}
+          className="text-xs text-stone-400 hover:text-red-500 transition-colors"
+        >
+          Vaciar carrito
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Items */}
@@ -116,11 +151,17 @@ export default function CartPage() {
             <span>Total</span>
             <span>{formatPrice(total)}</span>
           </div>
-          <Link href="/checkout">
-            <Button size="lg" className="w-full mt-2">
-              Proceder al pago
-            </Button>
-          </Link>
+          {error && (
+            <p className="text-xs text-red-500 text-center">{error}</p>
+          )}
+          <Button
+            size="lg"
+            className="w-full mt-2"
+            onClick={handleCheckout}
+            disabled={loading}
+          >
+            {loading ? "Redirigiendo..." : "Proceder al pago"}
+          </Button>
           <Link href="/shop">
             <Button variant="ghost" size="sm" className="w-full">
               Seguir comprando
